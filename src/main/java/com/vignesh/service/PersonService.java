@@ -1,5 +1,6 @@
 package com.vignesh.service;
 
+import com.vignesh.exception.PersonNotFoundException;
 import com.vignesh.model.Person;
 import com.vignesh.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 //defining the business logic
 @Service
@@ -24,7 +26,11 @@ return persons;
 //getting a specific record
 public Person getPersonById(int id)
 {
-return personRepository.findById(id).get();
+    Optional<Person> person = personRepository.findById(id);
+    if(!person.isPresent()){
+        return null;
+    }
+    return person.get();
 }
 public void saveOrUpdate(Person person)
 {

@@ -26,6 +26,17 @@ public class Person {
     //defining favourite_color as column name
     @Column
     private String favourite_color;
+    public Person(){
+
+    }
+    public Person(int i, String testName, String testLastName, int i1, String testColor) {
+        this.id = i;
+        this.first_name = testName;
+        this.last_name = testLastName;
+        this.age = i1;
+        this.favourite_color = testColor;
+    }
+
     public int getId()
     {
         return id;

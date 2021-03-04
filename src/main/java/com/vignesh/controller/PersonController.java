@@ -25,7 +25,8 @@ PersonService personService;
 @ApiOperation( value = "Find all Persons", notes = "retrieves all the persons detail from the database", response = Person.class)
 private List<Person> getAllPerson()
 {
-return personService.getAllPerson();
+
+    return personService.getAllPerson();
 }
 
 
@@ -34,7 +35,12 @@ return personService.getAllPerson();
 @ApiOperation( value = "Find Person by id", notes = "retrieves the details of a specific person")
 private Person getPerson(@PathVariable("id") int id)
 {
-return personService.getPersonById(id);
+    Person person = personService.getPersonById(id);
+    if(person == null){
+        throw new PersonNotFoundException("PersonNotFound");
+    }
+    System.out.println(person);
+    return person;
 }
 
 
@@ -46,7 +52,7 @@ private void deletePerson(@PathVariable("id") int id)
 {
     Person person = personService.getPersonById(id);
     if(person == null){
-        throw new PersonNotFoundException();
+        throw new PersonNotFoundException("PersonNotFound");
     }
     try {
         personService.delete(id);
@@ -59,17 +65,19 @@ private void deletePerson(@PathVariable("id") int id)
 //creating a delete mapping that deletes a specific person
 @DeleteMapping("/person")
 @ApiOperation( value = "Delete Person by id", notes = "delete a specific person")
-private void deletePersonByParamId(@RequestParam(required = true) int id)
+private String deletePersonByParamId(@RequestParam(required = true) int id)
 {
     Person person = personService.getPersonById(id);
     if(person == null){
-        throw new PersonNotFoundException();
+        throw new PersonNotFoundException("PersonNotFound");
     }
     try {
         personService.delete(id);
+        return "Sucess";
     }
     catch(Exception e){
         logger.error(e.toString());
+        return "Error =" + e.toString();
     }
 }
 
